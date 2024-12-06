@@ -47,15 +47,15 @@ def load_mesh(mesh_path):
         mesh = scene_or_mesh
     print("Mesh:", mesh)
 
-    # Normalize
-    verts = mesh.vertices.reshape(-1, 3)
-    verts = verts - verts.mean(axis=0).reshape(1, 3)
-    verts = verts / np.linalg.norm(verts, axis=-1).max() * 0.9
-    print("Normalized vertices",
-          "\n\tMax:", verts.max(),
-          "\n\tMin:", verts.min(),
-          "\n\tAvg:", verts.mean())
-    mesh = trimesh.Trimesh(vertices=verts, faces=mesh.faces)
+    # # Normalize
+    # verts = mesh.vertices.reshape(-1, 3)
+    # verts = verts - verts.mean(axis=0).reshape(1, 3)
+    # verts = verts / np.linalg.norm(verts, axis=-1).max() * 0.9
+    # print("Normalized vertices",
+    #       "\n\tMax:", verts.max(),
+    #       "\n\tMin:", verts.min(),
+    #       "\n\tAvg:", verts.mean())
+    # mesh = trimesh.Trimesh(vertices=verts, faces=mesh.faces)
     return mesh
 
 
