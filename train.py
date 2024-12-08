@@ -5,8 +5,12 @@ import argparse
 import importlib
 import os.path as osp
 from utils import AverageMeter, dict2namespace, update_cfg_hparam_lst
-from torch.backends import cudnn
+import torch
+#from torch.backends import cudnn
 from torch.utils.tensorboard import SummaryWriter
+
+
+assert torch.cuda.is_available(), "No CUDA device detected. Exiting..."
 
 
 def get_args():
@@ -58,7 +62,7 @@ def get_args():
 
 def main_worker(cfg, args):
     # basic setup
-    cudnn.benchmark = True
+    # cudnn.benchmark = True
 
     writer = SummaryWriter(log_dir=cfg.log_name)
     data_lib = importlib.import_module(cfg.data.type)

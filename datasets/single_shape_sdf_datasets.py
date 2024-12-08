@@ -1,3 +1,6 @@
+from pathlib import Path
+
+import trimesh
 import torch
 import numpy as np
 from torch.utils import data
@@ -12,10 +15,31 @@ class SingleShape(Dataset):
 
         # Normalize based on norm, leave some space at top/bottom
         # The vertices will be within [-1, 1]
-        self.data = np.load(cfg.path, allow_pickle=True).item()
-        self.mesh = self.data['mesh']
-        self.points = self.data['points']
-        self.sdf = self.data['sdf']
+        # self.data = np.load(cfg.path, allow_pickle=True).item()
+        # self.mesh = self.data['mesh']
+        # self.points = self.data['points']
+        # self.sdf = self.data['sdf']
+        
+        parent_dir = Path(cfg.path).parent
+        obj_inst = Path(cfg.path).stem.split("-")[0]
+        pts_path = parent_dir / f"{obj_inst}-pts.npy"
+        sdf_path = parent_dir / f"{obj_inst}-sdf.npy"
+        mesh_v_path = parent_dir / f"{obj_inst}-mesh_v.npy"
+        mesh_f_path = parent_dir / f"{obj_inst}-mesh_f.npy"
+        
+        self.points = np.load(pts_path)
+        self.sdf = np.load(sdf_path)
+        
+        mesh_v = np.load(mesh_v_path)
+        mesh_f = np.load(mesh_f_path)
+        self.mesh = trimesh.Trimesh(vertices=mesh_v, faces=mesh_f)
+        
+        self.data = {
+            'points': self.points,
+            'sdf': self.sdf,
+            "mesh": self.mesh
+        }
+        
         self.dim = getattr(self.cfg, "dim", 3)
         self.length = int(cfgdata.length)
 

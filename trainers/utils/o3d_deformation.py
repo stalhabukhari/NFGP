@@ -15,8 +15,8 @@ def trimesh_to_o3dmesh(mesh):
 
 def o3dmesh_to_trimesh(mesh):
     mesh = trimesh.Trimesh(
-        vertices=np.asarray(mesh.vertices).reshape(-1, 3).astype(np.float),
-        faces=np.asarray(mesh.triangles).reshape(-1, 3).astype(np.int)
+        vertices=np.asarray(mesh.vertices).reshape(-1, 3).astype(np.float32),
+        faces=np.asarray(mesh.triangles).reshape(-1, 3).astype(np.int64)
     )
     return mesh
 

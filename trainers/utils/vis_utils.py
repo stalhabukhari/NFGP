@@ -18,7 +18,7 @@ def imf2mesh(imf, res=256, threshold=0.0, batch_size = 10000, verbose=True,
         ys[..., np.newaxis],
         xs[..., np.newaxis],
         zs[..., np.newaxis]
-    ], axis=-1).astype(np.float)
+    ], axis=-1).astype(np.float32)
     grid = (grid / float(res - 1) - 0.5) * 2 * bound
     grid = grid.reshape(-1, 3)
     # Grid will be [-1, 1] * bound
@@ -71,7 +71,7 @@ def imf2mesh(imf, res=256, threshold=0.0, batch_size = 10000, verbose=True,
     if return_stats:
         if new_mesh is not None:
             area = new_mesh.area
-            vol = (field < threshold).astype(np.float).mean() * (2 * bound) ** 3
+            vol = (field < threshold).astype(np.float32).mean() * (2 * bound) ** 3
         else:
             area = 0
             vol = 0
@@ -115,14 +115,14 @@ def imf2img(imf, res=256, add_noise=False, batch_size=10000, threshold=0.,
         [x for x in dists_lst], axis=0)
     img = dists.reshape(res, res, -1)
     if return_stats:
-        area = (img < threshold).astype(np.float).mean() * 2 ** 2
+        area = (img < threshold).astype(np.float32).mean() * 2 ** 2
         contours = skimage.measure.find_contours(
             img.reshape(res, res), level=threshold)
         total_length = 0
         for vert in contours:
             n_v_c = vert.shape[0]
             n_v_c_idx = np.array(
-                (np.arange(n_v_c).astype(np.int) + 1) % n_v_c).astype(np.int)
+                (np.arange(n_v_c).astype(np.int64) + 1) % n_v_c).astype(np.int64)
             v_next = vert[n_v_c_idx, :]
             v_next = v_next.reshape(n_v_c, 2)
             diff = (vert - v_next) / float(res)
